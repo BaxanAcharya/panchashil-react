@@ -6,10 +6,13 @@ import { useEffect, useState } from "react";
 import { auth } from "./utils/config/firebase";
 import { Backdrop, CircularProgress } from "@mui/material";
 
+import NavBar from "./components/nav/NavBar";
+
 import Dashboard from "./pages/dasboard";
 import Auth from "./pages/auth";
 import Class from "./pages/classes";
-import NavBar from "./components/nav/NavBar";
+
+import Student from "./pages/student";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -63,6 +66,16 @@ function App() {
           element={
             <PrivateRoute user={user}>
               <Class />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          exact
+          path="/student"
+          element={
+            <PrivateRoute user={user}>
+              <Student />
             </PrivateRoute>
           }
         />

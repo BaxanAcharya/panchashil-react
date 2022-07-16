@@ -13,7 +13,6 @@ import { Container, Table } from "react-bootstrap";
 import { db } from "../../utils/config/firebase";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import { Link } from "react-router-dom";
-// import Link from "next/link";
 
 const ClassTable = ({ classes }) => {
   const deleteClass = async (id) => {
