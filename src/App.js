@@ -1,12 +1,15 @@
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Auth from "./pages/auth";
 import PrivateRoute from "./utils/private/PrivateRoute";
-import Dashboard from "./pages/dasboard";
 import { useEffect, useState } from "react";
 import { auth } from "./utils/config/firebase";
 import { Backdrop, CircularProgress } from "@mui/material";
+
+import Dashboard from "./pages/dasboard";
+import Auth from "./pages/auth";
+import Class from "./pages/classes";
+import NavBar from "./components/nav/NavBar";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -35,6 +38,8 @@ function App() {
       >
         <CircularProgress color="inherit" />
       </Backdrop>
+
+      {user && <NavBar />}
       <Routes>
         <Route
           exact
@@ -48,6 +53,16 @@ function App() {
           element={
             <PrivateRoute user={user}>
               <Dashboard />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          exact
+          path="/class"
+          element={
+            <PrivateRoute user={user}>
+              <Class />
             </PrivateRoute>
           }
         />

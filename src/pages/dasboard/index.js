@@ -1,14 +1,12 @@
 import React from "react";
 import Admission from "../../components/admission/Admission";
-import NavBar from "../../components/nav/NavBar";
 
-const index = () => {
+const Index = () => {
   return (
     <>
-      <NavBar />
       <Admission />
     </>
   );
 };
 
-export default index;
+export default Index;
