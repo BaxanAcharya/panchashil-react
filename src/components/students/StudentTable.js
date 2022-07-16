@@ -26,6 +26,7 @@ const StudentTable = ({ students, filtered, search }) => {
         >
           <TableHead>
             <TableRow>
+              <TableCell>SN</TableCell>
               <TableCell>Name</TableCell>
               <TableCell>Class</TableCell>
               <TableCell>Date of Birth</TableCell>
@@ -40,11 +41,12 @@ const StudentTable = ({ students, filtered, search }) => {
           </TableHead>
           <TableBody>
             {search.length > 1
-              ? filtered.map((studentItem) => (
+              ? filtered.map((studentItem, i) => (
                   <TableRow
                     key={studentItem.id}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
+                    <TableCell>{i + 1}</TableCell>
                     <TableCell>{studentItem.data.fullName}</TableCell>
                     <TableCell>{studentItem.data.className}</TableCell>
                     <TableCell>{studentItem.data.dateOfBirth}</TableCell>
@@ -72,11 +74,12 @@ const StudentTable = ({ students, filtered, search }) => {
                     </TableCell>
                   </TableRow>
                 ))
-              : students.map((studentItem) => (
+              : students.map((studentItem, i) => (
                   <TableRow
                     key={studentItem.id}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
+                    <TableCell>{i + 1}</TableCell>
                     <TableCell>{studentItem.data.fullName}</TableCell>
                     <TableCell>{studentItem.data.className}</TableCell>
                     <TableCell>{studentItem.data.dateOfBirth}</TableCell>

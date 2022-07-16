@@ -157,16 +157,13 @@ const Index = () => {
                     >
                       <option disabled>Sort By Class</option>
                       <option value={"All"}>All</option>
-                      <option value="six">six</option>
-                      <option value="three">three</option>
-                      <option value="ten">ten</option>
-                      <option value="five">five</option>
-                      <option value="nursery">nursery</option>
-                      <option value="two">two</option>
-                      <option value="two">two</option>
-                      <option value="JKG">JKG</option>
-                      <option value="four">four</option>
-                      <option value="one">one</option>
+                      <option value="P.NURSERY">play nursery</option>
+                      <option value="NURSERY">nursery</option>
+                      <option value="JKG">jkg</option>
+                      <option value="KG">kg</option>
+                      <option value="ONE">one</option>
+                      <option value="TWO">two</option>
+                      <option value="THREE">three</option>
                     </select>
                   </div>
                 </div>
