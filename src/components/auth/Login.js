@@ -17,42 +17,43 @@ import { auth } from "../../utils/config/firebase";
 import Logo from "../../assets/img/CircleLogo.png";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import getUser from "../../utils/firebaseUser";
 
 const initialValues = {
   email: "",
   password: "",
 };
 
-const onSubmit = async (values, { setSubmitting }) => {
-  try {
-    const user = await signInWithEmailAndPassword(
-      auth,
-      values.email,
-      values.password
-    );
-    setSubmitting(false);
-    console.log(user);
-  } catch (error) {
-    console.log(error);
-    alert(error.message);
-    setSubmitting(false);
-  }
-};
+// const onSubmit = async (values, { setSubmitting }) => {};
 
-const Login = () => {
+const Login = ({ user, setUser }) => {
   const navigate = useNavigate();
   const formik = useFormik({
     initialValues,
-    onSubmit,
+    onSubmit: async (values, { setSubmitting }) => {
+      try {
+        const userRes = await signInWithEmailAndPassword(
+          auth,
+          values.email,
+          values.password
+        );
+        setSubmitting(false);
+        setUser(userRes);
+      } catch (error) {
+        console.log(error);
+        alert(error.message);
+        setSubmitting(false);
+      }
+    },
     validationSchema: loginValidationSchema,
   });
 
   useEffect(() => {
-    if (getUser) {
+    if (user) {
       navigate("/dashboard");
+    } else {
+      navigate("/");
     }
-  }, [navigate]);
+  }, [user, navigate]);
 
   return (
     <Grid container component="main" sx={{ height: "100vh" }}>
