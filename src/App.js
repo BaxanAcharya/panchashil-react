@@ -6,20 +6,35 @@ import PrivateRoute from "./utils/private/PrivateRoute";
 import Dashboard from "./pages/dasboard";
 import { useEffect, useState } from "react";
 import { auth } from "./utils/config/firebase";
+import { Backdrop, CircularProgress } from "@mui/material";
 
 function App() {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      setUser(user);
-    });
+    try {
+      setLoading(true);
+      const unsubscribe = auth.onAuthStateChanged((user) => {
+        setUser(user);
+        setLoading(false);
+      });
 
-    return unsubscribe;
+      return unsubscribe;
+    } catch (error) {
+      alert(error);
+      setLoading(false);
+    }
   }, []);
 
   return (
     <Router>
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={loading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <Routes>
         <Route
           exact
