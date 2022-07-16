@@ -11,8 +11,8 @@ import NavBar from "./components/nav/NavBar";
 import Dashboard from "./pages/dasboard";
 import Auth from "./pages/auth";
 import Class from "./pages/classes";
-
 import Student from "./pages/student";
+import AddStudent from "./pages/student/Add";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -76,6 +76,16 @@ function App() {
           element={
             <PrivateRoute user={user}>
               <Student />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          exact
+          path="/student/add"
+          element={
+            <PrivateRoute user={user}>
+              <AddStudent />
             </PrivateRoute>
           }
         />
