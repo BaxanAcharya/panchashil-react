@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Grid, Paper, TextField } from "@mui/material";
+import { CircularProgress, Grid, TextField } from "@mui/material";
 import { useFormik } from "formik";
 import React from "react";
 import { classValidationSchema } from "../../utils/validation/validation";
@@ -37,31 +37,13 @@ const AddClass = ({ classes }) => {
   );
 
   return (
-    <Grid
-      item
-      component={Paper}
-      elevation={6}
-      square
-      className="mt-5"
-      style={{
-        border: "1px solid #ccc",
-        borderRadius: "10px",
-        padding: "15px",
-      }}
-    >
-      <Box
-        component="form"
-        onSubmit={formik.handleSubmit}
-        noValidate
-        sx={{ mt: 1 }}
-      >
-        <p className="text-success">Add Class</p>
-        {findClass && (
-          <p className="text-danger">
-            {formik.values.class} class already exist
-          </p>
-        )}
-        {formik.isSubmitting && <CircularProgress color="secondary" />}
+    <Grid container spacing={1}>
+      {findClass && (
+        <p className="text-danger">Class {formik.values.class} already exist</p>
+      )}
+
+      {formik.isSubmitting && <CircularProgress color="secondary" />}
+      <Grid item xs={12}>
         <TextField
           margin="normal"
           required
@@ -79,6 +61,9 @@ const AddClass = ({ classes }) => {
             {formik.errors.class}
           </div>
         ) : null}
+      </Grid>
+
+      <Grid item xs={12}>
         <button
           type="submit"
           className="btn btn-outline-primary mt-3"
@@ -86,7 +71,7 @@ const AddClass = ({ classes }) => {
         >
           Add
         </button>
-      </Box>
+      </Grid>
     </Grid>
   );
 };

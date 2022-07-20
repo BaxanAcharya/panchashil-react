@@ -7,10 +7,8 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-//   import { deleteDoc, doc } from "firebase/firestore";
 import React from "react";
 import { Container, Table } from "react-bootstrap";
-//   import { db } from "../../utils/config/firebase";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import { Link } from "react-router-dom";
 

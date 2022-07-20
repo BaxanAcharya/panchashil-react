@@ -111,6 +111,14 @@ const NavBar = () => {
               </Link>
             </Nav.Link>
 
+            <Nav.Link>
+              <Link
+                to="/subjects"
+                className={`${location.pathname === "/subjects" && "active"}`}
+              >
+                Subjects
+              </Link>
+            </Nav.Link>
             <div>
               <Nav.Link
                 id="basic-button"

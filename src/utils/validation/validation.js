@@ -36,3 +36,7 @@ export const addStudentValidationSchema = Yup.object({
 export const addExamValidationSchema = Yup.object({
   examName: Yup.string().required("Exam name is required"),
 });
+
+export const addSubjectValidationSchema = Yup.object({
+  subjectName: Yup.string().required("Subject name is required"),
+});

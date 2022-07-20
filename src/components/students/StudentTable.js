@@ -71,6 +71,7 @@ const StudentTable = ({ students, filtered, search }) => {
                       <IconButton>
                         <RemoveRedEyeIcon />
                       </IconButton>
+                      <button className="btn">Add Result</button>
                     </TableCell>
                   </TableRow>
                 ))
@@ -104,6 +105,7 @@ const StudentTable = ({ students, filtered, search }) => {
                       <IconButton>
                         <RemoveRedEyeIcon />
                       </IconButton>
+                      <button className="btn">Add Result</button>
                     </TableCell>
                   </TableRow>
                 ))}

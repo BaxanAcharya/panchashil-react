@@ -15,6 +15,7 @@ import Student from "./pages/student";
 import AddStudent from "./pages/student/Add";
 import ClassStudents from "./pages/class-students";
 import Exams from "./pages/exams";
+import Subjects from "./pages/subjects";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -100,6 +101,16 @@ function App() {
               element={
                 <PrivateRoute user={user}>
                   <Exams />
+                </PrivateRoute>
+              }
+            />
+
+            <Route
+              exact
+              path="/subjects"
+              element={
+                <PrivateRoute user={user}>
+                  <Subjects />
                 </PrivateRoute>
               }
             />
