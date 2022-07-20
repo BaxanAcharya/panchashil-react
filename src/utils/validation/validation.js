@@ -32,3 +32,7 @@ export const addStudentValidationSchema = Yup.object({
   pdateOfBirth: Yup.string().required("Date of birth is required *"),
   feeSchedule: Yup.string().required("Fee Schedule (Per Month) is required"),
 });
+
+export const addExamValidationSchema = Yup.object({
+  examName: Yup.string().required("Exam name is required"),
+});

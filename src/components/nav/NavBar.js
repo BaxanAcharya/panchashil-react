@@ -102,6 +102,15 @@ const NavBar = () => {
               </Link>
             </Nav.Link>
 
+            <Nav.Link>
+              <Link
+                to="/exams"
+                className={`${location.pathname === "/exams" && "active"}`}
+              >
+                Exams
+              </Link>
+            </Nav.Link>
+
             <div>
               <Nav.Link
                 id="basic-button"

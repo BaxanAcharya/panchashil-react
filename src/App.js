@@ -14,6 +14,7 @@ import Class from "./pages/classes";
 import Student from "./pages/student";
 import AddStudent from "./pages/student/Add";
 import ClassStudents from "./pages/class-students";
+import Exams from "./pages/exams";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -36,71 +37,85 @@ function App() {
 
   return (
     <Router>
-      <Backdrop
-        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={loading}
-      >
-        <CircularProgress color="inherit" />
-      </Backdrop>
+      {loading ? (
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={loading}
+        >
+          <CircularProgress color="success" />
+        </Backdrop>
+      ) : (
+        <>
+          {user && <NavBar />}
+          <Routes>
+            <Route
+              exact
+              path="/"
+              element={<Auth user={user} setUser={setUser} />}
+            />
 
-      {user && <NavBar />}
-      <Routes>
-        <Route
-          exact
-          path="/"
-          element={<Auth user={user} setUser={setUser} />}
-        />
+            <Route
+              exact
+              path="/dashboard"
+              element={
+                <PrivateRoute user={user}>
+                  <Dashboard />
+                </PrivateRoute>
+              }
+            />
 
-        <Route
-          exact
-          path="/dashboard"
-          element={
-            <PrivateRoute user={user}>
-              <Dashboard />
-            </PrivateRoute>
-          }
-        />
+            <Route
+              exact
+              path="/class"
+              element={
+                <PrivateRoute user={user}>
+                  <Class />
+                </PrivateRoute>
+              }
+            />
 
-        <Route
-          exact
-          path="/class"
-          element={
-            <PrivateRoute user={user}>
-              <Class />
-            </PrivateRoute>
-          }
-        />
+            <Route
+              exact
+              path="/student"
+              element={
+                <PrivateRoute user={user}>
+                  <Student />
+                </PrivateRoute>
+              }
+            />
 
-        <Route
-          exact
-          path="/student"
-          element={
-            <PrivateRoute user={user}>
-              <Student />
-            </PrivateRoute>
-          }
-        />
+            <Route
+              exact
+              path="/student/add"
+              element={
+                <PrivateRoute user={user}>
+                  <AddStudent />
+                </PrivateRoute>
+              }
+            />
 
-        <Route
-          exact
-          path="/student/add"
-          element={
-            <PrivateRoute user={user}>
-              <AddStudent />
-            </PrivateRoute>
-          }
-        />
+            <Route
+              exact
+              path="/exams"
+              element={
+                <PrivateRoute user={user}>
+                  <Exams />
+                </PrivateRoute>
+              }
+            />
 
-        <Route
-          exact
-          path="/class-students/:id"
-          element={
-            <PrivateRoute user={user}>
-              <ClassStudents />
-            </PrivateRoute>
-          }
-        />
-      </Routes>
+            <Route
+              exact
+              path="/class-students/:id"
+              element={
+                <PrivateRoute user={user}>
+                  <ClassStudents />
+                </PrivateRoute>
+              }
+            />
+          </Routes>
+        </>
+      )}
     </Router>
   );
 }
