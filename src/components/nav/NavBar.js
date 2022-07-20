@@ -119,41 +119,38 @@ const NavBar = () => {
                 Subjects
               </Link>
             </Nav.Link>
-            <div>
-              <Nav.Link
-                id="basic-button"
-                aria-controls={open ? "basic-menu" : undefined}
-                aria-haspopup="true"
-                aria-expanded={open ? "true" : undefined}
-                onClick={handleClick}
-              >
-                Settings
-              </Nav.Link>
-              <Menu
-                id="basic-menu"
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleClose}
-                MenuListProps={{
-                  "aria-labelledby": "basic-button",
-                }}
-              >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
-                <MenuItem onClick={handleClose}>My account</MenuItem>
-              </Menu>
-            </div>
           </Nav>
 
-          <button
-            className="btn btn-outline-danger"
-            onClick={() => {
-              auth.signOut();
-
-              navigate("/");
+          <Nav.Link
+            id="basic-button"
+            aria-controls={open ? "basic-menu" : undefined}
+            aria-haspopup="true"
+            aria-expanded={open ? "true" : undefined}
+            onClick={handleClick}
+          >
+            Settings
+          </Nav.Link>
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            MenuListProps={{
+              "aria-labelledby": "basic-button",
             }}
           >
-            Logout
-          </button>
+            <MenuItem onClick={handleClose}>Profile</MenuItem>
+            <MenuItem onClick={handleClose}>My account</MenuItem>
+            <MenuItem
+              onClick={() => {
+                auth.signOut();
+
+                navigate("/");
+              }}
+            >
+              Logout
+            </MenuItem>
+          </Menu>
         </Navbar.Collapse>
       </Container>
     </Navbar>
