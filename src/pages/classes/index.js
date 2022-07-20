@@ -86,8 +86,8 @@ const Index = () => {
         <DialogTitle id="alert-dialog-title">{"Add class"}</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            To Add the subject for the classes, please fill up the below form
-            and click add button.
+            To Add the the classes, please fill up the below form and click add
+            button.
           </DialogContentText>
           <br />
           <AddClass classes={classes} />
