@@ -1,4 +1,5 @@
 import {
+  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
@@ -6,13 +7,21 @@ import {
   DialogTitle,
   IconButton,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import AddExams from "../../components/exams/AddExams";
 import { addExamValidationSchema } from "../../utils/validation/validation";
 import { useFormik } from "formik";
-import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  getDocs,
+  onSnapshot,
+  query,
+  where,
+} from "firebase/firestore";
 import { db } from "../../utils/config/firebase";
+import ExamTable from "../../components/exams/ExamTable";
 
 const initialValues = {
   examName: "",
@@ -21,6 +30,9 @@ const initialValues = {
 
 const Index = () => {
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [exams, setExams] = useState([]);
+
   const formik = useFormik({
     initialValues,
     validationSchema: addExamValidationSchema,
@@ -36,15 +48,10 @@ const Index = () => {
         );
 
         const querySnapshot = await getDocs(queryDb);
-
-        console.log(querySnapshot.size);
-
         if (querySnapshot.size === 0) {
-          console.log("add");
           await addDoc(collection(db, "exams"), objExam);
           handleClose();
         } else {
-          console.log("dont add");
           alert("The exam you want to add already exist");
         }
         setSubmitting(false);
@@ -65,6 +72,31 @@ const Index = () => {
     setOpen(false);
   };
 
+  useEffect(() => {
+    let unsub;
+
+    try {
+      unsub = onSnapshot(collection(db, "exams"), (snap) => {
+        setExams(
+          snap.docs.map((doc) => ({
+            id: doc.id,
+            data: doc.data(),
+          }))
+        );
+      });
+      setLoading(false);
+    } catch (e) {
+      alert(e);
+      setLoading(false);
+    }
+
+    if (unsub) {
+      return () => {
+        unsub();
+      };
+    }
+  }, []);
+
   return (
     <div className="card">
       <div className="card-header">
@@ -78,7 +110,13 @@ const Index = () => {
           </div>
         </div>
       </div>
-      <div className="card-body">sdasdassad</div>
+      <div className="card-body">
+        {loading ? (
+          <CircularProgress color="secondary" />
+        ) : (
+          <ExamTable exams={exams} />
+        )}
+      </div>
 
       <Dialog
         open={open}
