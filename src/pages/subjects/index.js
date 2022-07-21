@@ -1,4 +1,5 @@
 import {
+  CircularProgress,
   //   CircularProgress,
   Dialog,
   DialogActions,
@@ -21,6 +22,7 @@ import {
 import { db } from "../../utils/config/firebase";
 import AddSubject from "../../components/subjects/AddSubject";
 import { addSubjectValidationSchema } from "../../utils/validation/validation";
+import SubjectTable from "../../components/subjects/SubjectTable";
 
 const initialValues = {
   subjectName: "",
@@ -31,6 +33,8 @@ const Index = () => {
   const [open, setOpen] = useState(false);
   const [classes, setClasses] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [subjects, setSubjects] = useState([]);
+
   const formik = useFormik({
     initialValues,
     validationSchema: addSubjectValidationSchema,
@@ -74,6 +78,31 @@ const Index = () => {
     setLoading(true);
     let unsub;
     try {
+      unsub = onSnapshot(collection(db, "subjects"), (snap) => {
+        setSubjects(
+          snap.docs.map((doc) => ({
+            id: doc.id,
+            data: doc.data(),
+          }))
+        );
+      });
+      setLoading(false);
+    } catch (e) {
+      alert(e);
+      setLoading(false);
+    }
+
+    if (unsub) {
+      return () => {
+        unsub();
+      };
+    }
+  }, []);
+
+  useEffect(() => {
+    setLoading(true);
+    let unsub;
+    try {
       unsub = onSnapshot(collection(db, "classes"), (snap) => {
         setClasses(
           snap.docs.map((doc) => ({
@@ -109,12 +138,11 @@ const Index = () => {
         </div>
       </div>
       <div className="card-body">
-        asdadasdasd
-        {/* {loading ? (
-      <CircularProgress color="secondary" />
-    ) : (
-      <ExamTable exams={exams} />
-    )} */}
+        {loading ? (
+          <CircularProgress color="secondary" />
+        ) : (
+          <SubjectTable subjects={subjects} />
+        )}
       </div>
 
       <Dialog

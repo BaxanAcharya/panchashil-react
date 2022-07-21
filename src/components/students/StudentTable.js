@@ -1,5 +1,5 @@
 import {
-  IconButton,
+  // IconButton,
   Paper,
   TableBody,
   TableCell,
@@ -7,13 +7,13 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import { useLocation } from "react-router-dom";
+// import { useLocation } from "react-router-dom";
 import { Container, Table } from "react-bootstrap";
 import * as humandate from "human-date";
-import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
+// import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 
 const StudentTable = ({ students, filtered, search }) => {
-  const location = useLocation();
+  // const location = useLocation();
   return (
     <Container className="mt-3">
       <TableContainer component={Paper}>
@@ -32,11 +32,7 @@ const StudentTable = ({ students, filtered, search }) => {
               <TableCell>Date of Birth</TableCell>
               <TableCell>Create Date</TableCell>
               <TableCell>Image</TableCell>
-              <TableCell>
-                {location.pathname.includes("class-students")
-                  ? "Print"
-                  : "Action"}{" "}
-              </TableCell>
+              <TableCell>Action</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -68,10 +64,10 @@ const StudentTable = ({ students, filtered, search }) => {
                       </a>
                     </TableCell>
                     <TableCell>
-                      <IconButton>
+                      {/* <IconButton>
                         <RemoveRedEyeIcon />
-                      </IconButton>
-                      <button className="btn">Add Result</button>
+                      </IconButton> */}
+                      <button className="btn">Action</button>
                     </TableCell>
                   </TableRow>
                 ))
@@ -102,10 +98,10 @@ const StudentTable = ({ students, filtered, search }) => {
                       </a>
                     </TableCell>
                     <TableCell>
-                      <IconButton>
+                      {/* <IconButton>
                         <RemoveRedEyeIcon />
-                      </IconButton>
-                      <button className="btn">Add Result</button>
+                      </IconButton> */}
+                      <button className="btn">Action</button>
                     </TableCell>
                   </TableRow>
                 ))}
