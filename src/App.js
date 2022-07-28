@@ -16,6 +16,8 @@ import AddStudent from "./pages/student/Add";
 import ClassStudents from "./pages/class-students";
 import Exams from "./pages/exams";
 import Subjects from "./pages/subjects";
+import ExamId from "./pages/exams/ExamId";
+import Result from "./pages/exams/Result";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -111,6 +113,26 @@ function App() {
               element={
                 <PrivateRoute user={user}>
                   <Subjects />
+                </PrivateRoute>
+              }
+            />
+
+            <Route
+              exact
+              path="/exam/:id"
+              element={
+                <PrivateRoute user={user}>
+                  <ExamId />
+                </PrivateRoute>
+              }
+            />
+
+            <Route
+              exact
+              path="/result/:examId/:studentId"
+              element={
+                <PrivateRoute user={user}>
+                  <Result />
                 </PrivateRoute>
               }
             />
