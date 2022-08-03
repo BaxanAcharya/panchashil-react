@@ -12,21 +12,25 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  TextField,
 } from "@mui/material";
 import { Container, Table } from "react-bootstrap";
 import * as humandate from "human-date";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import ExamMarks from "../ExamId/ExamMarks";
 import {
+  addDoc,
   collection,
   doc,
   getDoc,
   getDocs,
   query,
+  setDoc,
   where,
 } from "firebase/firestore";
 import { db } from "../../utils/config/firebase";
 import { Link, useParams } from "react-router-dom";
+import * as XLSX from "xlsx";
 
 const StudentTable = ({ students, filtered, search }) => {
   const { id } = useParams();
@@ -37,6 +41,25 @@ const StudentTable = ({ students, filtered, search }) => {
 
   const [open, setOpen] = useState(false);
   const [viewOpen, setViewOpen] = useState(false);
+
+  const [file, setFile] = useState(null);
+
+  const ref = useRef(null);
+
+  const handleFileChange = (e) => {
+    if (e.target.files.length !== 1) {
+      return alert("Please select one excel file");
+    }
+
+    const fileType = e.target.files[0].name;
+    const types = fileType.split(".");
+    if (types[1] !== "xlsx") {
+      alert("You can upload excel files only !!!");
+      ref.current.value = "";
+    } else {
+      setFile(e.target.files[0]);
+    }
+  };
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -52,6 +75,69 @@ const StudentTable = ({ students, filtered, search }) => {
 
   const handleViewClose = () => {
     setViewOpen(false);
+  };
+
+  const importResult = () => {
+    const promise = new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.readAsArrayBuffer(file);
+
+      fileReader.onload = (e) => {
+        const bufferArray = e.target.result;
+
+        const wb = XLSX.read(bufferArray, { type: "buffer" });
+
+        const wsname = wb.SheetNames[0];
+
+        const ws = wb.Sheets[wsname];
+
+        const data = XLSX.utils.sheet_to_json(ws);
+
+        resolve(data);
+      };
+
+      fileReader.onerror = (error) => {
+        setLoading(false);
+        reject(error);
+      };
+    });
+
+    promise.then((d) => {
+      let students = [];
+      students = d;
+
+      students.forEach(async (element) => {
+        console.log(element);
+        let subjectInfo = {};
+
+        subjectInfo.Dancing = element.Dancing;
+        subjectInfo.Dictation = element.Dictation;
+        subjectInfo.Drawing = element.Drawing;
+        subjectInfo.English = element.English;
+        subjectInfo["English Oral"] = element["English Oral"];
+        subjectInfo["G.K."] = element["G.K."];
+        subjectInfo.HandWriting = element.HandWriting;
+        subjectInfo.Math = element.Math;
+        subjectInfo.Nepali = element.Nepali;
+        subjectInfo["Nepali Oral"] = element["Nepali Oral"];
+        subjectInfo.Science = element.Science;
+
+        let studentId = element.StudentId;
+
+        console.log("subjectInfo", subjectInfo);
+
+        const examRef = doc(db, id, studentId);
+        setDoc(examRef, subjectInfo, { merge: true });
+      });
+      alert("Marks added.");
+      // setLoading(false);
+      // navigate("/student");
+    });
+
+    promise.catch((err) => {
+      alert(err);
+      setLoading(false);
+    });
   };
 
   // const viewResult = async (className, studentId) => {
@@ -105,6 +191,11 @@ const StudentTable = ({ students, filtered, search }) => {
 
   return (
     <Container className="mt-3">
+      <input type={"file"} onChange={handleFileChange} ref={ref} />
+
+      <button disabled={true} onClick={importResult}>
+        Import
+      </button>
       <TableContainer component={Paper}>
         <Table
           sx={{ minWidth: 650 }}
@@ -169,6 +260,8 @@ const StudentTable = ({ students, filtered, search }) => {
                         </Link>
                       )}
 
+                      <Link to={`/result/${id}/${studentItem.id}`}>asdasd</Link>
+
                       {/* <button
                         className="btn"
                         disabled={!id}
@@ -223,6 +316,7 @@ const StudentTable = ({ students, filtered, search }) => {
                           View Result
                         </Link>
                       )}
+                      <Link to={`/result/${id}/${studentItem.id}`}>asdasd</Link>
                       {/* <button
                         className="btn"
                         disabled={!id}
@@ -257,6 +351,19 @@ const AddMarksModal = ({
   subjects,
   selectedStudent,
 }) => {
+  const [attendence, setAttendence] = useState("");
+  const { id } = useParams();
+  const addAttendence = () => {
+    try {
+      let obj = {};
+      obj["attendence"] = parseInt(attendence);
+      const examRef = doc(db, id, selectedStudent);
+      setDoc(examRef, obj, { merge: true });
+      alert("Attendence added.");
+    } catch (error) {
+      alert(error);
+    }
+  };
   return (
     <Dialog
       open={open}
@@ -274,7 +381,31 @@ const AddMarksModal = ({
         {loading ? (
           <CircularProgress />
         ) : (
-          <ExamMarks subjects={subjects} selectedStudent={selectedStudent} />
+          <>
+            <TextField
+              type="number"
+              value={attendence}
+              onChange={(e) => setAttendence(e.target.value)}
+              id="marks"
+              name={`attendence`}
+              label={`Attendence`}
+              fullWidth
+              autoComplete="attendence"
+              variant="standard"
+            />
+            <br />
+            <br />
+            <button
+              className="btn btn-primary"
+              disabled={!id || !attendence}
+              onClick={addAttendence}
+            >
+              Add
+            </button>
+            <br />
+            <br />
+            <ExamMarks subjects={subjects} selectedStudent={selectedStudent} />
+          </>
         )}
       </DialogContent>
       <DialogActions>

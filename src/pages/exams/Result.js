@@ -10,7 +10,7 @@ const Result = () => {
   const navigate = useNavigate();
   const [student, setStudent] = useState(false);
   const [exam, setExam] = useState(null);
-  const [subjects, setSubjects] = useState([]);
+  // const [subjects, setSubjects] = useState([]);
 
   useEffect(() => {
     const getResultAndStudent = async () => {
@@ -52,7 +52,11 @@ const Result = () => {
           <h3 className="card-title"> Result</h3>
         </div>
         <div className="card-body">
-          <ResultCom student={student} result={result} exam={exam} />
+          {!result ? (
+            <p>Result Not added</p>
+          ) : (
+            <ResultCom student={student} result={result} exam={exam} />
+          )}
         </div>
       </div>
     </div>
