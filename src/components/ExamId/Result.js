@@ -63,6 +63,7 @@ const Result = ({ student, result, exam }) => {
         style={{
           paddingRight: "20px",
           paddingLeft: "20px",
+          marginTop: "20px",
         }}
       >
         <div
@@ -93,6 +94,7 @@ const Result = ({ student, result, exam }) => {
             style={{
               paddingRight: "20px",
               paddingLeft: "20px",
+              // marginTop: "-19px",
             }}
           >
             <div

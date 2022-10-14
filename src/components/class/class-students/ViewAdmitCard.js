@@ -4,6 +4,7 @@ import React, { useRef, useState } from "react";
 import NepaliDate from "nepali-date-converter";
 import Logo from "../../../assets/img/CircleLogo.png";
 import ReactToPrint from "react-to-print";
+import "./ViewAdmitCard.css";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -61,10 +62,17 @@ const ViewAdmitCard = ({ classes }) => {
 
         <hr />
 
-        <div className="row" ref={printRef}>
+        <div className="grid" ref={printRef}>
           {classes.map((singleClass) => {
             return (
-              <div className="col-md-6 " key={singleClass.id}>
+              <div
+                className="player"
+                key={singleClass.id}
+                style={{
+                  marginTop: "15px",
+                  marginBottom: "25px",
+                }}
+              >
                 <div
                   style={{
                     border: "1px solid black",
@@ -86,10 +94,10 @@ const ViewAdmitCard = ({ classes }) => {
                     <div>
                       <img
                         src={Logo}
-                        width={90}
-                        height={90}
+                        width={70}
+                        height={70}
                         alt="Logo of panchashil"
-                        style={{ marginTop: "-230px" }}
+                        style={{ marginTop: "-100px" }}
                       />
                     </div>
                   </div>
