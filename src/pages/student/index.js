@@ -6,8 +6,11 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import {
   collection,
+  doc,
+  getDoc,
   getDocs,
   onSnapshot,
+  orderBy,
   query,
   where,
 } from "firebase/firestore";
@@ -27,16 +30,29 @@ const Index = () => {
     const getAllStudentsList = async () => {
       try {
         setLoading(true);
-        unsub = onSnapshot(collection(db, "students"), (snap) => {
-          setStudents(
-            snap.docs.map((doc) => ({
-              id: doc.id,
-              data: doc.data(),
-            }))
-          );
-        });
+        const docRef = doc(db, "classes", className);
+        const docSnap = await getDoc(docRef);
+        const q = query(
+          collection(db, "students"),
+          orderBy("rollNo", "asc"),
+          orderBy("className", "asc")
+        );
+        const querySnapshot = await getDocs(q);
+        if (querySnapshot.docs.length > 0) {
+          let studentArr = [];
+          querySnapshot.forEach((doc) => {
+            console.log(doc.data());
+            let obj = {};
+            obj.id = doc.id;
+            obj.data = doc.data();
+            studentArr.push(obj);
+          });
+
+          setStudents(studentArr);
+        }
         setLoading(false);
       } catch (e) {
+        console.log(e);
         alert(e);
         setLoading(false);
       }
