@@ -24,6 +24,7 @@ import {
   doc,
   getDoc,
   getDocs,
+  orderBy,
   query,
   setDoc,
   where,
@@ -163,6 +164,7 @@ const StudentTable = ({ students, filtered, search }) => {
         setLoading(true);
         const q = query(
           collection(db, "subjects"),
+          orderBy("order", "asc"),
           where("class", "==", className)
         );
 
@@ -175,12 +177,12 @@ const StudentTable = ({ students, filtered, search }) => {
             obj.data = doc.data();
             studentArr.push(obj);
           });
-
           setSubjects(studentArr);
           setSelectedStudent(studentId);
           setLoading(false);
         }
       } catch (error) {
+        console.log(error);
         alert(error);
         setLoading(false);
       }
@@ -191,11 +193,11 @@ const StudentTable = ({ students, filtered, search }) => {
 
   return (
     <Container className="mt-3">
-      <input type={"file"} onChange={handleFileChange} ref={ref} />
+      {/* <input type={"file"} onChange={handleFileChange} ref={ref} />
 
       <button disabled={true} onClick={importResult}>
         Import
-      </button>
+      </button> */}
       <TableContainer component={Paper}>
         <Table
           sx={{ minWidth: 650 }}
@@ -259,18 +261,6 @@ const StudentTable = ({ students, filtered, search }) => {
                           View Result
                         </Link>
                       )}
-
-                      <Link to={`/result/${id}/${studentItem.id}`}>asdasd</Link>
-
-                      {/* <button
-                        className="btn"
-                        disabled={!id}
-                        onClick={() =>
-                          viewResult(studentItem.data.className, studentItem.id)
-                        }
-                      >
-                        View Result
-                      </button> */}
                     </TableCell>
                   </TableRow>
                 ))
@@ -316,16 +306,6 @@ const StudentTable = ({ students, filtered, search }) => {
                           View Result
                         </Link>
                       )}
-                      <Link to={`/result/${id}/${studentItem.id}`}>asdasd</Link>
-                      {/* <button
-                        className="btn"
-                        disabled={!id}
-                        onClick={() =>
-                          viewResult(studentItem.data.className, studentItem.id)
-                        }
-                      >
-                        View Result
-                      </button> */}
                     </TableCell>
                   </TableRow>
                 ))}

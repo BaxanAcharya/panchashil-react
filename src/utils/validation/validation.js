@@ -39,4 +39,12 @@ export const addExamValidationSchema = Yup.object({
 
 export const addSubjectValidationSchema = Yup.object({
   subjectName: Yup.string().required("Subject name is required"),
+  fullMarks: Yup.number()
+    .required("Full marks is required")
+    .max(100, "Full marks can only be upto 100")
+    .min(1, "Full marks must be at least 1"),
+  order: Yup.number()
+    .required("Order is required")
+    .max(100, "Order can only be upto 100")
+    .min(1, "Order must be at least 1"),
 });

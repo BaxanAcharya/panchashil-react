@@ -1,6 +1,5 @@
 import {
   CircularProgress,
-  //   CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
@@ -16,6 +15,7 @@ import {
   collection,
   getDocs,
   onSnapshot,
+  orderBy,
   query,
   where,
 } from "firebase/firestore";
@@ -27,6 +27,8 @@ import SubjectTable from "../../components/subjects/SubjectTable";
 const initialValues = {
   subjectName: "",
   class: "Select Here",
+  fullMarks: "",
+  order: "",
 };
 
 const Index = () => {
@@ -78,7 +80,12 @@ const Index = () => {
     setLoading(true);
     let unsub;
     try {
-      unsub = onSnapshot(collection(db, "subjects"), (snap) => {
+      const q = query(
+        collection(db, "subjects"),
+        orderBy("order", "asc"),
+        orderBy("class", "asc")
+      );
+      onSnapshot(q, (snap) => {
         setSubjects(
           snap.docs.map((doc) => ({
             id: doc.id,
@@ -86,6 +93,7 @@ const Index = () => {
           }))
         );
       });
+
       setLoading(false);
     } catch (e) {
       alert(e);
@@ -171,7 +179,11 @@ const Index = () => {
             disabled={
               formik.values.class === "Select Here" ||
               formik.errors.subjectName ||
-              !formik.values.subjectName
+              !formik.values.subjectName ||
+              formik.errors.order ||
+              !formik.values.order ||
+              formik.errors.fullMarks ||
+              !formik.values.fullMarks
             }
           >
             Add

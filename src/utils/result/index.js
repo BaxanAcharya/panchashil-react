@@ -1,5 +1,16 @@
+export const getGrade = (subject, result) => {
+  const subjectName = subject.subjectName;
+  const subjectFullMarks = parseInt(subject.fullMarks);
+
+  const mark = result[subjectName];
+  return grade(mark, subjectFullMarks);
+};
+
+export const getOverallGrade = (sum, subjects) => {
+  return grade(sum, getTotalMarksOfClass(subjects));
+};
+
 export const grade = (mark, total) => {
-  console.log("total", total);
   const percentage = (mark / total) * 100;
   if (percentage >= 90) {
     return "A+";
@@ -55,6 +66,17 @@ export const getRemarks = (grade) => {
   return remarks;
 };
 
+export const getGpa = (subject, result) => {
+  const subjectName = subject.subjectName;
+  const subjectFullMarks = parseInt(subject.fullMarks);
+  const mark = result[subjectName];
+  return Gpa(mark, subjectFullMarks);
+};
+
+export const getOverallGpa = (sum, subjects) => {
+  return Gpa(sum, getTotalMarksOfClass(subjects));
+};
+
 export const Gpa = (mark, total) => {
   const percentage = (mark / total) * 100;
   if (percentage >= 90) {
@@ -78,99 +100,10 @@ export const Gpa = (mark, total) => {
   }
 };
 
-export const getTotalOfSubject = (sub) => {
-  let fullMarks;
-  switch (sub) {
-    case "G.K.":
-      fullMarks = 50;
-      break;
-    case "Nepali":
-      fullMarks = 100;
-      break;
-    case "Social":
-      fullMarks = 100;
-      break;
-    case "Math":
-      fullMarks = 100;
-      break;
-    case "Nepali Oral":
-      fullMarks = 25;
-      break;
-    case "Nepali Ora":
-      fullMarks = 25;
-      break;
-    case "English Oral":
-      fullMarks = 25;
-      break;
-    case "Dance":
-      fullMarks = 50;
-      break;
-    case "Dancing":
-      fullMarks = 50;
-      break;
-    case "Drawing":
-      fullMarks = 10;
-      break;
-    case "Dictation":
-      fullMarks = 20;
-      break;
-    case "Science":
-      fullMarks = 100;
-      break;
-    case "Computer":
-      fullMarks = 50;
-      break;
-    case "Moral":
-      fullMarks = 50;
-      break;
-    case "Grammar":
-      fullMarks = 50;
-      break;
-    case "English":
-      fullMarks = 100;
-      break;
-    case "Handwriting":
-      fullMarks = 20;
-      break;
-    case "HandWriting":
-      fullMarks = 20;
-      break;
-    case "Writing":
-      fullMarks = 20;
-      break;
-    case "Serofero":
-      fullMarks = 100;
-      break;
-    default:
-      fullMarks = 100;
-      break;
-  }
+export const getTotalMarksOfClass = (subjects) => {
+  const totalMarksOfExam = subjects.reduce((a, b) => {
+    return a + parseInt(b.fullMarks);
+  }, 0);
 
-  return fullMarks;
-};
-
-export const getOveralTotal = (className) => {
-  let overalTotal;
-  switch (className) {
-    case "KG A":
-      overalTotal = 600;
-      break;
-    case "JKG A":
-      overalTotal = 600;
-      break;
-    case "NURSERY A":
-      overalTotal = 500;
-      break;
-    case "THREE A":
-      overalTotal = 800;
-      break;
-    case "ONE A":
-      overalTotal = 800;
-      break;
-    default:
-      overalTotal = 800;
-      break;
-  }
-
-  return overalTotal;
+  return totalMarksOfExam;
 };

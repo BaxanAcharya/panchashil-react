@@ -4,40 +4,30 @@ import CircleLogo from "../../assets/img/CircleLogo.png";
 import LargeLogo from "../../assets/img/RectangleLogo.png";
 import ReactToPrint from "react-to-print";
 import {
-  getOveralTotal,
+  getGrade,
+  getGpa,
+  getOverallGpa,
+  getOverallGrade,
   getRemarks,
-  getTotalOfSubject,
-  Gpa,
-  grade,
 } from "../../utils/result";
 
-const Result = ({ student, result, exam }) => {
-  const ref = useRef();
+const Result = ({ student, results, exam, subjects }) => {
+  let result = Object.assign({}, results);
+  if (result.hasOwnProperty("Writing")) {
+    result["Handwriting"] = result["Writing"];
+  }
+  console.log(result);
 
-  const values = Object.values(result);
-  const sum = values.reduce((accumulator, value) => {
+  const ref = useRef();
+  let marks = [];
+  subjects.forEach((element) => {
+    marks.push(result[element.subjectName]);
+  });
+
+  const sum = marks.reduce((accumulator, value) => {
     return accumulator + value;
   }, 0);
 
-  console.log(getTotalOfSubject(`${student.className} ${student.section}`));
-
-  var tifOptions = Object.keys(result).map(function (key, i) {
-    if (key !== "attendence") {
-      return (
-        <tr key={key}>
-          <th>{i + 1}</th>
-          <th>{key}</th>
-          <th>{grade(result[key], getTotalOfSubject(key))}</th>
-          <th>{Gpa(result[key], getTotalOfSubject(key))}</th>
-        </tr>
-      );
-    }
-  });
-
-  const gradeTotal = grade(
-    sum,
-    getOveralTotal(`${student.className} ${student.section}`)
-  );
   return (
     <>
       <ReactToPrint
@@ -102,10 +92,10 @@ const Result = ({ student, result, exam }) => {
               style={{ justifyContent: "space-between" }}
             >
               <div>
-                <b>Father's Name- {student.fatherName}</b>
+                <b>FATHER'S NAME- {student.fatherName}</b>
               </div>
               <div>
-                <b>Attendence- {result?.attendence}</b>
+                <b>ATTENDENCE- {result?.attendence}</b>
               </div>
             </div>
 
@@ -114,16 +104,16 @@ const Result = ({ student, result, exam }) => {
               style={{ justifyContent: "space-between" }}
             >
               <div>
-                <b>Stu Name- {student.fullName}</b>
+                <b>STUDENT NAME- {student.fullName}</b>
               </div>
               <div>
                 <b>
-                  Class- {student.className} {student.section}
+                  CLASS- {student.className} {student.section}
                 </b>
               </div>
               <div>
                 {" "}
-                <b>Roll No- {student.rollNo}</b>
+                <b>ROLL- {student.rollNo}</b>
               </div>
             </div>
           </div>
@@ -142,7 +132,21 @@ const Result = ({ student, result, exam }) => {
                 <th scope="col">GPA</th>
               </tr>
             </thead>
-            <tbody>{tifOptions}</tbody>
+
+            <tbody>
+              {subjects.map((s, i) => {
+                return (
+                  <tr key={s.id}>
+                    <th>{i + 1}</th>
+                    <th>{s.subjectName}</th>
+                    <th>{getGrade(s, result)}</th>
+                    <th>{getGpa(s, result)}</th>
+                  </tr>
+                );
+                {
+                }
+              })}
+            </tbody>
           </table>
           <div
             className="d-flex align-items-center"
@@ -156,18 +160,27 @@ const Result = ({ student, result, exam }) => {
               style={{ color: "blue", fontWeight: 500 }}
               className="terminal-text"
             >
-              GRADE AVERAGE POINT (GPA):{" "}
-              {Gpa(
-                sum,
-                getOveralTotal(`${student.className} ${student.section}`)
-              )}
+              GRADE AVERAGE POINT (GPA):{getOverallGpa(sum, subjects)}
+              {}
+            </div>
+            <div>
+              <img
+                src={CircleLogo}
+                style={{
+                  height: "100px",
+                  width: "100px",
+                  objectFit: "contain",
+                }}
+                alt="Circular Logo"
+                className="mb-3"
+              />
             </div>
             <div>
               <div
                 style={{ color: "blue", fontWeight: 500 }}
                 className="terminal-text"
               >
-                GRADE: {gradeTotal}
+                GRADE: {getOverallGrade(sum, subjects)}
               </div>
             </div>
           </div>
@@ -180,7 +193,7 @@ const Result = ({ student, result, exam }) => {
             }}
             className="terminal-text"
           >
-            Remarks: {getRemarks(gradeTotal)}
+            Remarks: {getRemarks(getOverallGrade(sum, subjects))}
           </div>
 
           <hr />
@@ -225,24 +238,11 @@ const Result = ({ student, result, exam }) => {
             justifyContent: "space-between",
             paddingRight: "20px",
             paddingLeft: "20px",
-            // marginTop: "-10px",
           }}
         >
           <div>
             <span>-------------------</span>
             <div>Prepared By</div>
-          </div>
-          <div>
-            <img
-              src={CircleLogo}
-              style={{
-                height: "50px",
-                width: "50px",
-                objectFit: "contain",
-              }}
-              alt="Circular Logo"
-              className="mb-3"
-            />
           </div>
           <div>
             <span>-------------------</span>

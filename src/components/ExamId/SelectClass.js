@@ -4,6 +4,7 @@ import {
   doc,
   getDoc,
   getDocs,
+  orderBy,
   query,
   where,
 } from "firebase/firestore";
@@ -23,6 +24,7 @@ const SelectClass = ({ className, classes, setClassName }) => {
         const docSnap = await getDoc(docRef);
         const q = query(
           collection(db, "students"),
+          orderBy("rollNo", "asc"),
           where("className", "==", docSnap.data().class)
         );
 
@@ -40,6 +42,7 @@ const SelectClass = ({ className, classes, setClassName }) => {
           setLoading(false);
         }
       } catch (error) {
+        console.log(error);
         alert(error);
         setLoading(false);
       }
@@ -69,7 +72,7 @@ const SelectClass = ({ className, classes, setClassName }) => {
       <br />
       <button
         className="btn btn-primary"
-        disabled={className === "Select Class"}
+        disabled={className === "Select class"}
         onClick={getClassStudent}
       >
         Get Students

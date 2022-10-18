@@ -23,7 +23,11 @@ const AddSubject = ({ classes, formik }) => {
           type="text"
           id="subject"
           name="subjectName"
-          label="Subject name"
+          label={
+            `${formik.errors.subjectName && formik.touched.subjectName}`
+              ? formik.errors.subjectName
+              : "Subject Name"
+          }
           fullWidth
           autoComplete="subjectName"
           required
@@ -53,6 +57,47 @@ const AddSubject = ({ classes, formik }) => {
             ))}
           </Select>
         </FormControl>
+      </Grid>
+
+      <Grid item xs={12}>
+        <TextField
+          value={formik.values.fullMarks}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          error={formik.errors.fullMarks && formik.touched.fullMarks}
+          type="number"
+          id="fullMarks"
+          name="fullMarks"
+          label={
+            `${formik.errors.fullMarks && formik.touched.fullMarks}`
+              ? formik.errors.fullMarks
+              : "Full marks"
+          }
+          fullWidth
+          autoComplete="fullMarks"
+          required
+          variant="standard"
+        />
+      </Grid>
+      <Grid item xs={12}>
+        <TextField
+          value={formik.values.order}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          error={formik.errors.order && formik.touched.order}
+          type="number"
+          id="order"
+          name="order"
+          label={
+            `${formik.errors.order && formik.touched.order}`
+              ? formik.errors.order
+              : "Order"
+          }
+          fullWidth
+          autoComplete="order"
+          required
+          variant="standard"
+        />
       </Grid>
     </Grid>
   );
