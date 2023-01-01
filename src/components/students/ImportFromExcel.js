@@ -74,8 +74,6 @@ const ImportFromExcel = () => {
       let students = [];
       students = d;
 
-      console.log(students);
-
       //   return;
 
       //   let i = 0;

@@ -5,7 +5,7 @@ import { Button } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import { db } from "../../utils/config/firebase";
 
-const TextFieldCustom = ({ s, selectedStudent }) => {
+const TextFieldCustom = ({ s, selectedStudent, studentResult }) => {
   const [marks, setMarks] = useState(0);
   const { id } = useParams();
 
@@ -24,25 +24,11 @@ const TextFieldCustom = ({ s, selectedStudent }) => {
     }
   };
 
-  //   useEffect(() => {
-  //     const getMarks = async () => {
-  //       try {
-  //         const citiesRef = collection(db, id);
-  //         let marks = await setDoc(doc(citiesRef, selectedStudent, key));
-  //         console.log(marks);
-  //       } catch (error) {
-  //         alert(error);
-  //       }
-  //     };
-
-  //     getMarks();
-  //   }, [id, marks, selectedStudent, key]);
-
   return (
     <>
       <TextField
         type="number"
-        value={marks}
+        value={studentResult ? studentResult[key] : marks}
         onChange={(e) => setMarks(e.target.value)}
         id="marks"
         name={`marks${key}`}
@@ -54,7 +40,7 @@ const TextFieldCustom = ({ s, selectedStudent }) => {
       <br />
       <br />
       <Button disabled={!id || !marks} onClick={addExamStudentMarks}>
-        Add
+        {studentResult ? "Edit" : "Add"}
       </Button>
       <br />
       <br />

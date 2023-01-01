@@ -1,11 +1,11 @@
 import React, { useRef } from "react";
 
+import ReactToPrint from "react-to-print";
 import CircleLogo from "../../assets/img/CircleLogo.png";
 import LargeLogo from "../../assets/img/RectangleLogo.png";
-import ReactToPrint from "react-to-print";
 import {
-  getGrade,
   getGpa,
+  getGrade,
   getOverallGpa,
   getOverallGrade,
   getRemarks,
@@ -16,8 +16,6 @@ const Result = ({ student, results, exam, subjects }) => {
   if (result.hasOwnProperty("Writing")) {
     result["Handwriting"] = result["Writing"];
   }
-  console.log(result);
-
   const ref = useRef();
   let marks = [];
   subjects.forEach((element) => {
@@ -143,8 +141,6 @@ const Result = ({ student, results, exam, subjects }) => {
                     <th>{getGpa(s, result)}</th>
                   </tr>
                 );
-                {
-                }
               })}
             </tbody>
           </table>

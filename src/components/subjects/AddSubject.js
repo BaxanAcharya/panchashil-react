@@ -15,6 +15,7 @@ const AddSubject = ({ classes, formik }) => {
     <Grid container spacing={3}>
       <Grid item xs={12}>
         {formik.isSubmitting && <CircularProgress />}
+        <label>Subject Name *</label>
         <TextField
           value={formik.values.subjectName}
           onChange={formik.handleChange}
@@ -36,6 +37,7 @@ const AddSubject = ({ classes, formik }) => {
       </Grid>
 
       <Grid item xs={12}>
+        <label>Class *</label>
         <FormControl fullWidth variant="standard">
           <InputLabel id="class-simple-select-label">Class *</InputLabel>
           <Select
@@ -60,6 +62,7 @@ const AddSubject = ({ classes, formik }) => {
       </Grid>
 
       <Grid item xs={12}>
+        <label>Full Marks *</label>
         <TextField
           value={formik.values.fullMarks}
           onChange={formik.handleChange}
@@ -80,6 +83,7 @@ const AddSubject = ({ classes, formik }) => {
         />
       </Grid>
       <Grid item xs={12}>
+        <label>Subject display order *</label>
         <TextField
           value={formik.values.order}
           onChange={formik.handleChange}

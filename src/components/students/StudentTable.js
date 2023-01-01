@@ -14,12 +14,7 @@ import {
   TableRow,
   TextField,
 } from "@mui/material";
-import { Container, Table } from "react-bootstrap";
-import * as humandate from "human-date";
-import { useRef, useState } from "react";
-import ExamMarks from "../ExamId/ExamMarks";
 import {
-  addDoc,
   collection,
   doc,
   getDoc,
@@ -29,38 +24,43 @@ import {
   setDoc,
   where,
 } from "firebase/firestore";
+import * as humandate from "human-date";
+import { useState } from "react";
+import { Container, Table } from "react-bootstrap";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { db } from "../../utils/config/firebase";
-import { Link, useParams } from "react-router-dom";
-import * as XLSX from "xlsx";
+import ExamMarks from "../ExamId/ExamMarks";
 
 const StudentTable = ({ students, filtered, search }) => {
+  const location = useLocation();
   const { id } = useParams();
   const [subjects, setSubjects] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState(null);
-  // const [selectedResult, setSelectResult] = useState(null);
+  const [studentResult, setSutentResult] = useState(null);
+  const [attendence, setAttendence] = useState("");
 
   const [open, setOpen] = useState(false);
-  const [viewOpen, setViewOpen] = useState(false);
+  // const [viewOpen, setViewOpen] = useState(false);
 
-  const [file, setFile] = useState(null);
+  // const [file, setFile] = useState(null);
 
-  const ref = useRef(null);
+  // const ref = useRef(null);
 
-  const handleFileChange = (e) => {
-    if (e.target.files.length !== 1) {
-      return alert("Please select one excel file");
-    }
+  // const handleFileChange = (e) => {
+  //   if (e.target.files.length !== 1) {
+  //     return alert("Please select one excel file");
+  //   }
 
-    const fileType = e.target.files[0].name;
-    const types = fileType.split(".");
-    if (types[1] !== "xlsx") {
-      alert("You can upload excel files only !!!");
-      ref.current.value = "";
-    } else {
-      setFile(e.target.files[0]);
-    }
-  };
+  //   const fileType = e.target.files[0].name;
+  //   const types = fileType.split(".");
+  //   if (types[1] !== "xlsx") {
+  //     alert("You can upload excel files only !!!");
+  //     ref.current.value = "";
+  //   } else {
+  //     setFile(e.target.files[0]);
+  //   }
+  // };
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -70,94 +70,92 @@ const StudentTable = ({ students, filtered, search }) => {
     setOpen(false);
   };
 
-  const handleViewOpen = () => {
-    setViewOpen(true);
-  };
+  // const handleViewOpen = () => {
+  //   setViewOpen(true);
+  // };
 
-  const handleViewClose = () => {
-    setViewOpen(false);
-  };
+  // const handleViewClose = () => {
+  //   setViewOpen(false);
+  // };
 
-  const importResult = () => {
-    const promise = new Promise((resolve, reject) => {
-      const fileReader = new FileReader();
-      fileReader.readAsArrayBuffer(file);
+  // const importResult = () => {
+  //   const promise = new Promise((resolve, reject) => {
+  //     const fileReader = new FileReader();
+  //     fileReader.readAsArrayBuffer(file);
 
-      fileReader.onload = (e) => {
-        const bufferArray = e.target.result;
+  //     fileReader.onload = (e) => {
+  //       const bufferArray = e.target.result;
 
-        const wb = XLSX.read(bufferArray, { type: "buffer" });
+  //       const wb = XLSX.read(bufferArray, { type: "buffer" });
 
-        const wsname = wb.SheetNames[0];
+  //       const wsname = wb.SheetNames[0];
 
-        const ws = wb.Sheets[wsname];
+  //       const ws = wb.Sheets[wsname];
 
-        const data = XLSX.utils.sheet_to_json(ws);
+  //       const data = XLSX.utils.sheet_to_json(ws);
 
-        resolve(data);
-      };
+  //       resolve(data);
+  //     };
 
-      fileReader.onerror = (error) => {
-        setLoading(false);
-        reject(error);
-      };
-    });
+  //     fileReader.onerror = (error) => {
+  //       setLoading(false);
+  //       reject(error);
+  //     };
+  //   });
 
-    promise.then((d) => {
-      let students = [];
-      students = d;
+  //   promise.then((d) => {
+  //     let students = [];
+  //     students = d;
 
-      students.forEach(async (element) => {
-        console.log(element);
-        let subjectInfo = {};
+  //     students.forEach(async (element) => {
+  //       let subjectInfo = {};
 
-        subjectInfo.Dancing = element.Dancing;
-        subjectInfo.Dictation = element.Dictation;
-        subjectInfo.Drawing = element.Drawing;
-        subjectInfo.English = element.English;
-        subjectInfo["English Oral"] = element["English Oral"];
-        subjectInfo["G.K."] = element["G.K."];
-        subjectInfo.HandWriting = element.HandWriting;
-        subjectInfo.Math = element.Math;
-        subjectInfo.Nepali = element.Nepali;
-        subjectInfo["Nepali Oral"] = element["Nepali Oral"];
-        subjectInfo.Science = element.Science;
+  //       subjectInfo.Dancing = element.Dancing;
+  //       subjectInfo.Dictation = element.Dictation;
+  //       subjectInfo.Drawing = element.Drawing;
+  //       subjectInfo.English = element.English;
+  //       subjectInfo["English Oral"] = element["English Oral"];
+  //       subjectInfo["G.K."] = element["G.K."];
+  //       subjectInfo.HandWriting = element.HandWriting;
+  //       subjectInfo.Math = element.Math;
+  //       subjectInfo.Nepali = element.Nepali;
+  //       subjectInfo["Nepali Oral"] = element["Nepali Oral"];
+  //       subjectInfo.Science = element.Science;
 
-        let studentId = element.StudentId;
+  //       let studentId = element.StudentId;
 
-        console.log("subjectInfo", subjectInfo);
+  //       const examRef = doc(db, id, studentId);
+  //       setDoc(examRef, subjectInfo, { merge: true });
+  //     });
+  //     alert("Marks added.");
+  //     // setLoading(false);
+  //     // navigate("/student");
+  //   });
 
-        const examRef = doc(db, id, studentId);
-        setDoc(examRef, subjectInfo, { merge: true });
-      });
-      alert("Marks added.");
-      // setLoading(false);
-      // navigate("/student");
-    });
-
-    promise.catch((err) => {
-      alert(err);
-      setLoading(false);
-    });
-  };
-
-  // const viewResult = async (className, studentId) => {
-  //   handleViewOpen();
-  //   try {
-  //     const resultRef = doc(db, id, studentId);
-  //     const docSnap = await getDoc(resultRef);
-  //     if (docSnap.exists()) {
-  //       setSelectResult(docSnap.data());
-  //     } else {
-  //       alert("Result not added");
-  //     }
-  //   } catch (error) {
-  //     alert(error);
-  //   }
+  //   promise.catch((err) => {
+  //     alert(err);
+  //     setLoading(false);
+  //   });
   // };
 
   const addResult = (className, studentId) => {
     handleClickOpen();
+
+    const getResultOfSutdent = async () => {
+      try {
+        const examRef = doc(db, id, studentId);
+        const resultSnap = await getDoc(examRef);
+
+        if (resultSnap.exists()) {
+          setSutentResult(resultSnap.data());
+          setAttendence(resultSnap.data()?.attendence);
+        } else {
+          setSutentResult(null);
+        }
+      } catch (error) {
+        alert(error);
+      }
+    };
 
     const getClassSubjects = async () => {
       try {
@@ -179,10 +177,10 @@ const StudentTable = ({ students, filtered, search }) => {
           });
           setSubjects(studentArr);
           setSelectedStudent(studentId);
+          getResultOfSutdent();
           setLoading(false);
         }
       } catch (error) {
-        console.log(error);
         alert(error);
         setLoading(false);
       }
@@ -199,6 +197,14 @@ const StudentTable = ({ students, filtered, search }) => {
         Import
       </button> */}
       <TableContainer component={Paper}>
+        <p
+          align="center"
+          style={{
+            fontSize: 20,
+          }}
+        >
+          Total Student - {search.length > 1 ? search.length : students.length}
+        </p>
         <Table
           sx={{ minWidth: 650 }}
           aria-label="simple table"
@@ -214,7 +220,9 @@ const StudentTable = ({ students, filtered, search }) => {
               <TableCell>Date of Birth</TableCell>
               <TableCell>Create Date</TableCell>
               <TableCell>Image</TableCell>
-              <TableCell>Action</TableCell>
+              {id && !location.pathname.includes("class-students") && (
+                <TableCell>Action</TableCell>
+              )}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -245,23 +253,25 @@ const StudentTable = ({ students, filtered, search }) => {
                         />
                       </a>
                     </TableCell>
-                    <TableCell>
-                      <button
-                        className="btn"
-                        disabled={!id}
-                        onClick={() =>
-                          addResult(studentItem.data.className, studentItem.id)
-                        }
-                      >
-                        Add Result
-                      </button>
-
-                      {id && (
+                    {id && !location.pathname.includes("class-students") && (
+                      <TableCell>
+                        <button
+                          className="btn"
+                          disabled={!id}
+                          onClick={() =>
+                            addResult(
+                              studentItem.data.className,
+                              studentItem.id
+                            )
+                          }
+                        >
+                          Add Result
+                        </button>
                         <Link to={`/result/${id}/${studentItem.id}`}>
                           View Result
                         </Link>
-                      )}
-                    </TableCell>
+                      </TableCell>
+                    )}
                   </TableRow>
                 ))
               : students.map((studentItem, i) => (
@@ -290,23 +300,26 @@ const StudentTable = ({ students, filtered, search }) => {
                         />
                       </a>
                     </TableCell>
-                    <TableCell>
-                      <button
-                        className="btn"
-                        disabled={!id}
-                        onClick={() =>
-                          addResult(studentItem.data.className, studentItem.id)
-                        }
-                      >
-                        Add Result
-                      </button>
+                    {id && !location.pathname.includes("class-students") && (
+                      <TableCell>
+                        <button
+                          className="btn"
+                          disabled={!id}
+                          onClick={() =>
+                            addResult(
+                              studentItem.data.className,
+                              studentItem.id
+                            )
+                          }
+                        >
+                          Add/Edit Result
+                        </button>
 
-                      {id && (
                         <Link to={`/result/${id}/${studentItem.id}`}>
                           View Result
                         </Link>
-                      )}
-                    </TableCell>
+                      </TableCell>
+                    )}
                   </TableRow>
                 ))}
           </TableBody>
@@ -318,7 +331,10 @@ const StudentTable = ({ students, filtered, search }) => {
         handleClose={handleClose}
         loading={loading}
         subjects={subjects}
+        studentResult={studentResult}
         selectedStudent={selectedStudent}
+        attendence={attendence}
+        setAttendence={setAttendence}
       />
     </Container>
   );
@@ -329,9 +345,12 @@ const AddMarksModal = ({
   handleClose,
   loading,
   subjects,
+  studentResult,
   selectedStudent,
+  attendence,
+  setAttendence,
 }) => {
-  const [attendence, setAttendence] = useState("");
+  console.log(studentResult);
   const { id } = useParams();
   const addAttendence = () => {
     try {
@@ -380,11 +399,15 @@ const AddMarksModal = ({
               disabled={!id || !attendence}
               onClick={addAttendence}
             >
-              Add
+              {studentResult ? "Edit" : "Add"}
             </button>
             <br />
             <br />
-            <ExamMarks subjects={subjects} selectedStudent={selectedStudent} />
+            <ExamMarks
+              subjects={subjects}
+              selectedStudent={selectedStudent}
+              studentResult={studentResult}
+            />
           </>
         )}
       </DialogContent>

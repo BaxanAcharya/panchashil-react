@@ -1,3 +1,4 @@
+import AddIcon from "@mui/icons-material/Add";
 import {
   CircularProgress,
   Dialog,
@@ -7,9 +8,6 @@ import {
   DialogTitle,
   IconButton,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import AddIcon from "@mui/icons-material/Add";
-import { useFormik } from "formik";
 import {
   addDoc,
   collection,
@@ -19,10 +17,12 @@ import {
   query,
   where,
 } from "firebase/firestore";
-import { db } from "../../utils/config/firebase";
+import { useFormik } from "formik";
+import React, { useEffect, useState } from "react";
 import AddSubject from "../../components/subjects/AddSubject";
-import { addSubjectValidationSchema } from "../../utils/validation/validation";
 import SubjectTable from "../../components/subjects/SubjectTable";
+import { db } from "../../utils/config/firebase";
+import { addSubjectValidationSchema } from "../../utils/validation/validation";
 
 const initialValues = {
   subjectName: "",
@@ -169,7 +169,7 @@ const Index = () => {
           <AddSubject classes={classes} formik={formik} />
         </DialogContent>
         <DialogActions>
-          <button className="btn  btn-danger" onClick={handleClose}>
+          <button className="btn btn-danger" onClick={handleClose}>
             Cancel
           </button>
           <button

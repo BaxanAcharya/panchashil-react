@@ -9,14 +9,14 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useFormik } from "formik";
-import CopyRight from "../copyright/CopyRight";
-import { loginValidationSchema } from "../../utils/validation/validation";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../utils/config/firebase";
-import Logo from "../../assets/img/CircleLogo.png";
+import { useFormik } from "formik";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Logo from "../../assets/img/CircleLogo.png";
+import { auth } from "../../utils/config/firebase";
+import { loginValidationSchema } from "../../utils/validation/validation";
+import CopyRight from "../copyright/CopyRight";
 
 const initialValues = {
   email: "",
@@ -39,7 +39,6 @@ const Login = ({ user, setUser }) => {
         setSubmitting(false);
         setUser(userRes);
       } catch (error) {
-        console.log(error);
         alert(error.message);
         setSubmitting(false);
       }

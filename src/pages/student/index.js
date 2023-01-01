@@ -1,9 +1,7 @@
 import React from "react";
 
-import { CircularProgress, IconButton } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { CircularProgress, IconButton } from "@mui/material";
 import {
   collection,
   doc,
@@ -14,8 +12,10 @@ import {
   query,
   where,
 } from "firebase/firestore";
-import { db } from "../../utils/config/firebase";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import StudentTable from "../../components/students/StudentTable";
+import { db } from "../../utils/config/firebase";
 
 const Index = () => {
   const [students, setStudents] = useState([]);
@@ -31,7 +31,7 @@ const Index = () => {
       try {
         setLoading(true);
         const docRef = doc(db, "classes", className);
-        const docSnap = await getDoc(docRef);
+        await getDoc(docRef);
         const q = query(
           collection(db, "students"),
           orderBy("rollNo", "asc"),
@@ -41,7 +41,6 @@ const Index = () => {
         if (querySnapshot.docs.length > 0) {
           let studentArr = [];
           querySnapshot.forEach((doc) => {
-            console.log(doc.data());
             let obj = {};
             obj.id = doc.id;
             obj.data = doc.data();
@@ -52,7 +51,6 @@ const Index = () => {
         }
         setLoading(false);
       } catch (e) {
-        console.log(e);
         alert(e);
         setLoading(false);
       }
@@ -65,6 +63,7 @@ const Index = () => {
         unsub();
       };
     }
+    // eslint-disable-next-line
   }, []);
 
   const searchByClass = async (e) => {
@@ -88,6 +87,7 @@ const Index = () => {
         setStudents(search);
       } else {
         alert("No students found");
+        // setClassName("All");
         setStudents([]);
       }
     } else if (e.target.value === "All") {

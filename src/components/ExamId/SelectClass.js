@@ -17,6 +17,8 @@ const SelectClass = ({ className, classes, setClassName }) => {
   const [loading, setLoading] = useState(false);
 
   const getClassStudent = () => {
+    if (className.trim() === "Select Class")
+      return alert("Please select a valid class");
     const getClassStudents = async () => {
       try {
         setLoading(true);
@@ -42,7 +44,6 @@ const SelectClass = ({ className, classes, setClassName }) => {
         }
         setLoading(false);
       } catch (error) {
-        console.log(error);
         alert(error);
         setLoading(false);
       }
@@ -50,6 +51,7 @@ const SelectClass = ({ className, classes, setClassName }) => {
 
     getClassStudents();
   };
+
   return (
     <div className="col-md-12">
       <Grid container spacing={1}></Grid>
@@ -72,7 +74,7 @@ const SelectClass = ({ className, classes, setClassName }) => {
       <br />
       <button
         className="btn btn-primary"
-        disabled={className === "Select class"}
+        disabled={className.trim() === "Select class"}
         onClick={getClassStudent}
       >
         Get Students

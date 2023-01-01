@@ -29,16 +29,13 @@ const SubjectTable = ({ subjects }) => {
       try {
         const subjectRef = doc(db, "subjects", selectedClass);
         const docs = await getDoc(subjectRef);
-        // console.log(docs);
         if (docs.exists()) {
           const values = docs.data();
           values.fullMarks && setFullMarks(values.fullMarks);
           values.order && setOrder(values.order);
-          // console.log(docs.data());
         }
       } catch (error) {
         alert(error);
-        console.log(error);
       }
     };
 
@@ -91,8 +88,15 @@ const SubjectTable = ({ subjects }) => {
   return (
     <>
       <Container className="mt-5">
-        <p className="align-center"> {subjects.length}- Subjects</p>
         <TableContainer component={Paper}>
+          <p
+            align="center"
+            style={{
+              fontSize: 20,
+            }}
+          >
+            Total Subjects - {subjects.length}
+          </p>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow>
