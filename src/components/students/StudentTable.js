@@ -41,6 +41,7 @@ const StudentTable = ({ students, filtered, search }) => {
   const [attendence, setAttendence] = useState("");
 
   const [open, setOpen] = useState(false);
+
   // const [viewOpen, setViewOpen] = useState(false);
 
   // const [file, setFile] = useState(null);
@@ -68,6 +69,7 @@ const StudentTable = ({ students, filtered, search }) => {
 
   const handleClose = () => {
     setOpen(false);
+    setSelectedStudent(null);
   };
 
   // const handleViewOpen = () => {
@@ -215,6 +217,7 @@ const StudentTable = ({ students, filtered, search }) => {
           <TableHead>
             <TableRow>
               <TableCell>SN</TableCell>
+              <TableCell>Roll No</TableCell>
               <TableCell>Name</TableCell>
               <TableCell>Class</TableCell>
               <TableCell>Date of Birth</TableCell>
@@ -233,6 +236,7 @@ const StudentTable = ({ students, filtered, search }) => {
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell>{i + 1}</TableCell>
+                    <TableCell>{studentItem.data.rollNo}</TableCell>
                     <TableCell>{studentItem.data.fullName}</TableCell>
                     <TableCell>{studentItem.data.className}</TableCell>
                     <TableCell>{studentItem.data.dateOfBirth}</TableCell>
@@ -280,6 +284,7 @@ const StudentTable = ({ students, filtered, search }) => {
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell>{i + 1}</TableCell>
+                    <TableCell>{studentItem.data.rollNo}</TableCell>
                     <TableCell>{studentItem.data.fullName}</TableCell>
                     <TableCell>{studentItem.data.className}</TableCell>
                     <TableCell>{studentItem.data.dateOfBirth}</TableCell>
@@ -350,7 +355,6 @@ const AddMarksModal = ({
   attendence,
   setAttendence,
 }) => {
-  console.log(studentResult);
   const { id } = useParams();
   const addAttendence = () => {
     try {
