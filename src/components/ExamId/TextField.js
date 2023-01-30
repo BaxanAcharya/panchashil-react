@@ -6,10 +6,9 @@ import { useParams } from "react-router-dom";
 import { db } from "../../utils/config/firebase";
 
 const TextFieldCustom = ({ s, selectedStudent, studentResult }) => {
-  const [marks, setMarks] = useState(0);
-  const { id } = useParams();
-
   const key = s.data.subjectName;
+  const [marks, setMarks] = useState(studentResult ? studentResult[key] : 0);
+  const { id } = useParams();
 
   let obj = {};
   obj[key] = parseInt(marks);
@@ -28,7 +27,7 @@ const TextFieldCustom = ({ s, selectedStudent, studentResult }) => {
     <>
       <TextField
         type="number"
-        value={studentResult ? studentResult[key] : marks}
+        value={marks}
         onChange={(e) => setMarks(e.target.value)}
         id="marks"
         name={`marks${key}`}
