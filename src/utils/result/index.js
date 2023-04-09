@@ -1,7 +1,18 @@
 export const getGrade = (subject, result) => {
-  const subjectName = subject.subjectName;
+  let subjectName = subject.subjectName;
   const subjectFullMarks = parseInt(subject.fullMarks);
 
+  console.log(" result", result);
+  console.log("subejct name", subject);
+
+  console.log(result.hasOwnProperty("Nepali.Oral"));
+
+  if (
+    !result.hasOwnProperty("Nepali.Oral") &&
+    subject.subjectName === "Nepali.Oral"
+  ) {
+    subjectName = "Nepali Oral";
+  }
   const mark = result[subjectName];
   return grade(mark, subjectFullMarks);
 };
@@ -67,7 +78,13 @@ export const getRemarks = (grade) => {
 };
 
 export const getGpa = (subject, result) => {
-  const subjectName = subject.subjectName;
+  let subjectName = subject.subjectName;
+  if (
+    !result.hasOwnProperty("Nepali.Oral") &&
+    subject.subjectName === "Nepali.Oral"
+  ) {
+    subjectName = "Nepali Oral";
+  }
   const subjectFullMarks = parseInt(subject.fullMarks);
   const mark = result[subjectName];
   return Gpa(mark, subjectFullMarks);

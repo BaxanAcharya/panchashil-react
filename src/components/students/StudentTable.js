@@ -225,16 +225,19 @@ const StudentTable = ({ students, filtered, search }) => {
   const addResult = (className, studentId) => {
     handleClickOpen();
 
+    console.log("asdasasd");
+
     const getResultOfSutdent = async () => {
       try {
         const examRef = doc(db, id, studentId);
         const resultSnap = await getDoc(examRef);
 
         if (resultSnap.exists()) {
-          setSutentResult(resultSnap.data());
-          setAttendence(resultSnap.data()?.attendence);
+          return { result: resultSnap.data() };
+          // setSutentResult(resultSnap.data());
+          // setAttendence(resultSnap.data()?.attendence);
         } else {
-          setSutentResult(null);
+          return { result: null };
         }
       } catch (error) {
         alert(error);
@@ -259,9 +262,12 @@ const StudentTable = ({ students, filtered, search }) => {
             obj.data = doc.data();
             studentArr.push(obj);
           });
+
+          const res = await getResultOfSutdent();
+          setSutentResult(res.result);
+          setAttendence(res.result?.attendence ? res.result?.attendence : 0);
           setSubjects(studentArr);
           setSelectedStudent(studentId);
-          getResultOfSutdent();
           setLoading(false);
         }
       } catch (error) {
@@ -441,7 +447,6 @@ const AddMarksModal = ({
   attendence,
   setAttendence,
 }) => {
-  console.log(studentResult);
   const { id } = useParams();
   const addAttendence = () => {
     try {
@@ -454,6 +459,9 @@ const AddMarksModal = ({
       alert(error);
     }
   };
+
+  // console.log(studentResult);
+  // console.log(attendence);
   return (
     <Dialog
       open={open}

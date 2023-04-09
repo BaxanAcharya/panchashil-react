@@ -26,6 +26,7 @@ const Result = ({ student, results, exam, subjects }) => {
     return accumulator + value;
   }, 0);
 
+  // console.log({ results });
   return (
     <>
       <ReactToPrint
