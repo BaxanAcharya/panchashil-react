@@ -6,8 +6,21 @@ import { useParams } from "react-router-dom";
 import { db } from "../../utils/config/firebase";
 
 const TextFieldCustom = ({ s, selectedStudent, studentResult }) => {
-  const key = s.data.subjectName;
-  const [marks, setMarks] = useState(studentResult ? studentResult[key] : 0);
+  let key = s.data.subjectName;
+
+  let mark = 0;
+  if (studentResult) {
+    if (
+      s.data.subjectName === "Handwriting" ||
+      typeof studentResult[s.data.subjectName] === "undefined"
+    ) {
+      mark = studentResult["Writing"];
+    } else {
+      mark = studentResult[s.data.subjectName];
+    }
+  }
+
+  const [marks, setMarks] = useState(studentResult ? mark : 0);
   const { id } = useParams();
 
   let obj = {};

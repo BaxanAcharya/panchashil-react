@@ -1,3 +1,4 @@
+import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import {
   IconButton,
   Paper,
@@ -9,7 +10,6 @@ import {
 } from "@mui/material";
 import React from "react";
 import { Container, Table } from "react-bootstrap";
-import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import { Link } from "react-router-dom";
 
 const ExamTable = ({ exams }) => {
@@ -19,6 +19,7 @@ const ExamTable = ({ exams }) => {
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
+              <TableCell align="left">Id</TableCell>
               <TableCell align="left">Exam Name</TableCell>
               <TableCell align="left">Exam Year</TableCell>
               <TableCell align="right">Action</TableCell>
@@ -30,6 +31,7 @@ const ExamTable = ({ exams }) => {
                 key={examItem.id}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
+                <TableCell>{examItem.id}</TableCell>
                 <TableCell>{examItem.data.examName}</TableCell>
 
                 <TableCell>{examItem.data.examYear}</TableCell>

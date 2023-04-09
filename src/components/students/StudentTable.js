@@ -25,9 +25,10 @@ import {
   where,
 } from "firebase/firestore";
 import * as humandate from "human-date";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Container, Table } from "react-bootstrap";
 import { Link, useLocation, useParams } from "react-router-dom";
+import * as XLSX from "xlsx";
 import { db } from "../../utils/config/firebase";
 import ExamMarks from "../ExamId/ExamMarks";
 
@@ -41,26 +42,25 @@ const StudentTable = ({ students, filtered, search }) => {
   const [attendence, setAttendence] = useState("");
 
   const [open, setOpen] = useState(false);
-  // const [viewOpen, setViewOpen] = useState(false);
 
-  // const [file, setFile] = useState(null);
+  const [file, setFile] = useState(null);
 
-  // const ref = useRef(null);
+  const ref = useRef(null);
 
-  // const handleFileChange = (e) => {
-  //   if (e.target.files.length !== 1) {
-  //     return alert("Please select one excel file");
-  //   }
+  const handleFileChange = (e) => {
+    if (e.target.files.length !== 1) {
+      return alert("Please select one excel file");
+    }
 
-  //   const fileType = e.target.files[0].name;
-  //   const types = fileType.split(".");
-  //   if (types[1] !== "xlsx") {
-  //     alert("You can upload excel files only !!!");
-  //     ref.current.value = "";
-  //   } else {
-  //     setFile(e.target.files[0]);
-  //   }
-  // };
+    const fileType = e.target.files[0].name;
+    const types = fileType.split(".");
+    if (types[1] !== "xlsx") {
+      alert("You can upload excel files only !!!");
+      ref.current.value = "";
+    } else {
+      setFile(e.target.files[0]);
+    }
+  };
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -70,73 +70,157 @@ const StudentTable = ({ students, filtered, search }) => {
     setOpen(false);
   };
 
-  // const handleViewOpen = () => {
-  //   setViewOpen(true);
-  // };
+  const importResult = () => {
+    const promise = new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.readAsArrayBuffer(file);
 
-  // const handleViewClose = () => {
-  //   setViewOpen(false);
-  // };
+      fileReader.onload = (e) => {
+        const bufferArray = e.target.result;
 
-  // const importResult = () => {
-  //   const promise = new Promise((resolve, reject) => {
-  //     const fileReader = new FileReader();
-  //     fileReader.readAsArrayBuffer(file);
+        const wb = XLSX.read(bufferArray, { type: "buffer" });
 
-  //     fileReader.onload = (e) => {
-  //       const bufferArray = e.target.result;
+        const wsname = wb.SheetNames[7];
 
-  //       const wb = XLSX.read(bufferArray, { type: "buffer" });
+        const ws = wb.Sheets[wsname];
 
-  //       const wsname = wb.SheetNames[0];
+        const data = XLSX.utils.sheet_to_json(ws);
 
-  //       const ws = wb.Sheets[wsname];
+        resolve(data);
+      };
 
-  //       const data = XLSX.utils.sheet_to_json(ws);
+      fileReader.onerror = (error) => {
+        setLoading(false);
+        reject(error);
+      };
+    });
 
-  //       resolve(data);
-  //     };
+    promise.then((d) => {
+      let students = [];
+      students = d;
 
-  //     fileReader.onerror = (error) => {
-  //       setLoading(false);
-  //       reject(error);
-  //     };
-  //   });
+      students.forEach(async (element) => {
+        // console.log({ element });
+        // return;
+        let subjectInfo = {};
 
-  //   promise.then((d) => {
-  //     let students = [];
-  //     students = d;
+        //======== class one subjects
+        // subjectInfo.English = element.English;
+        // subjectInfo.Nepali = element.Nepali;
+        // subjectInfo.Math = element.Math;
+        // subjectInfo.Science = element.Science;
+        // subjectInfo.Serofero = element.Serofero;
+        // subjectInfo.Computer = element["Com."];
+        // subjectInfo.Moral = element["Moral"];
+        // subjectInfo.Grammar = element["Gram."];
+        // subjectInfo["G.K."] = element["G.K."];
+        // subjectInfo.Drawing = element["Draw"];
+        // subjectInfo.Dictation = element["Dic."];
+        // subjectInfo.Writing = element["Writing"];
+        // subjectInfo["attendence"] = element["Atte."];
+        //======== class one subjects
 
-  //     students.forEach(async (element) => {
-  //       let subjectInfo = {};
+        // //======== class three subjects
+        // subjectInfo.English = element.English;
+        // subjectInfo.Nepali = element.Nepali;
+        // subjectInfo.Math = element.Math;
+        // subjectInfo.Science = element.Science;
+        // subjectInfo.Serofero = element.Serofero;
+        // subjectInfo.Computer = element["Com."];
+        // subjectInfo.Moral = element["Moral"];
+        // subjectInfo.Grammar = element["Gram."];
+        // subjectInfo["G.K."] = element["G.K."];
+        // subjectInfo.Drawing = element["Draw"];
+        // subjectInfo.Dictation = element["Dictation"];
+        // subjectInfo.Writing = element["H.W."];
+        // subjectInfo["attendence"] = element["Atte."];
+        // //======== class three subjects
 
-  //       subjectInfo.Dancing = element.Dancing;
-  //       subjectInfo.Dictation = element.Dictation;
-  //       subjectInfo.Drawing = element.Drawing;
-  //       subjectInfo.English = element.English;
-  //       subjectInfo["English Oral"] = element["English Oral"];
-  //       subjectInfo["G.K."] = element["G.K."];
-  //       subjectInfo.HandWriting = element.HandWriting;
-  //       subjectInfo.Math = element.Math;
-  //       subjectInfo.Nepali = element.Nepali;
-  //       subjectInfo["Nepali Oral"] = element["Nepali Oral"];
-  //       subjectInfo.Science = element.Science;
+        // //======== class JKG A subjects
+        // subjectInfo.English = element["Eng.Oral"];
+        // subjectInfo["English Oral"] = element["Eng.Oral"];
+        // subjectInfo.Nepali = element["Nep."];
+        // subjectInfo["Nepali Oral"] = element["Nep.Oral"];
+        // subjectInfo.Math = element.Math;
+        // subjectInfo.Science = element["Scie."];
+        // subjectInfo["G.K."] = element["G.K"];
+        // subjectInfo.Drawing = element["Draw."];
+        // subjectInfo.Dictation = element["Dicta."];
+        // subjectInfo.Writing = element["HW."];
+        // subjectInfo["attendence"] = element["Atten."];
+        // console.log({ subjectInfo });
+        // //======== class JKG A subjects
 
-  //       let studentId = element.StudentId;
+        // // //======== class Nursery subjects
+        // subjectInfo.English = element["Eng."] ? element["Eng."] : 0;
+        // subjectInfo.Nepali = element["Nep."] ? element["Nep."] : 0;
+        // subjectInfo.Math = element.Math ? element.Math : 0;
+        // subjectInfo["G.K."] = element["G.K."] ? element["G.K."] : 0;
+        // subjectInfo["English Oral"] = element["Eng.Oral"]
+        //   ? element["Eng.Oral"]
+        //   : 0;
+        // subjectInfo["Nepali Oral"] = element["Nep.Oral"]
+        //   ? element["Nep.Oral"]
+        //   : 0;
+        // subjectInfo.Dictation = element["Dict."] ? element["Dict."] : 0;
+        // subjectInfo.Writing = element["HW."] ? element["HW."] : 0;
+        // subjectInfo.Drawing = element["Draw"] ? element["Draw"] : 0;
+        // subjectInfo["attendence"] = element["Atten."] ? element["Atten."] : 0;
+        // // //======== class Nursery subjects
 
-  //       const examRef = doc(db, id, studentId);
-  //       setDoc(examRef, subjectInfo, { merge: true });
-  //     });
-  //     alert("Marks added.");
-  //     // setLoading(false);
-  //     // navigate("/student");
-  //   });
+        // // //======== class KG subjects
+        // subjectInfo.English = element["Eng."];
+        // subjectInfo.Nepali = element["Nep."];
+        // subjectInfo.Math = element.Math;
+        // subjectInfo.Science = element["Sci."];
+        // subjectInfo.Social = element["Soc."];
+        // subjectInfo["G.K."] = element["G.K"];
+        // subjectInfo["English Oral"] = element["E.ORAL"];
+        // subjectInfo["Nepali Oral"] = element["N.ORAL"];
+        // subjectInfo.Dictation = element["Dicta."];
+        // subjectInfo.Writing = element["HW."];
+        // subjectInfo.Drawing = element["Drawing"];
+        // subjectInfo["attendence"] = element["Attendance"];
+        // // //======== class KG subjects
 
-  //   promise.catch((err) => {
-  //     alert(err);
-  //     setLoading(false);
-  //   });
-  // };
+        // // //======== class P.Nursery subjects
+        subjectInfo.English = element["Eng."] ? element["Eng."] : 0;
+        subjectInfo.Nepali = element["Nep."] ? element["Nep."] : 0;
+        subjectInfo.Math = element.Math ? element.Math : 0;
+        subjectInfo["English Oral"] = element["E.Oral"] ? element["E.Oral"] : 0;
+        subjectInfo["Nepali Oral"] = element["N.Oral"] ? element["N.Oral"] : 0;
+        subjectInfo.Writing = element["H.W."] ? element["H.W."] : 0;
+        subjectInfo.Drawing = element["Draw"] ? element["Draw"] : 0;
+        subjectInfo.Hygiene = element["Hygie."] ? element["Hygie."] : 0;
+        subjectInfo.Rhyme = element["Rhym"] ? element["Rhym"] : 0;
+        subjectInfo["attendence"] = element["Atten."] ? element["Atten."] : 0;
+        // // //======== classP.Nursery  subjects
+
+        const q = query(
+          collection(db, "students"),
+          where("fullName", "==", element["Students Name"])
+        );
+
+        const querySnapshot = await getDocs(q);
+        if (querySnapshot.size > 0) {
+          querySnapshot.forEach(async (d) => {
+            let studentId = d.id;
+
+            const examRef = doc(db, `y2o5w5rO2uSG12cnpusM`, studentId);
+            await setDoc(examRef, subjectInfo, { merge: true });
+            console.log("added");
+          });
+        } else {
+          console.log("not found", element["Students Name"]);
+        }
+      });
+    });
+
+    promise.catch((err) => {
+      alert(err);
+      setLoading(false);
+    });
+  };
 
   const addResult = (className, studentId) => {
     handleClickOpen();
@@ -191,11 +275,14 @@ const StudentTable = ({ students, filtered, search }) => {
 
   return (
     <Container className="mt-3">
-      {/* <input type={"file"} onChange={handleFileChange} ref={ref} />
+      <input type={"file"} onChange={handleFileChange} ref={ref} />
 
-      <button disabled={true} onClick={importResult}>
+      <button
+        // disabled={true}
+        onClick={importResult}
+      >
         Import
-      </button> */}
+      </button>
       <TableContainer component={Paper}>
         <p
           align="center"
@@ -232,8 +319,10 @@ const StudentTable = ({ students, filtered, search }) => {
                     key={studentItem.id}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
-                    <TableCell>{i + 1}</TableCell>
-                    <TableCell>{studentItem.data.fullName}</TableCell>
+                    <TableCell>
+                      {i + 1} {studentItem.id}
+                    </TableCell>
+                    <TableCell>{studentItem.data.fullName} </TableCell>
                     <TableCell>{studentItem.data.className}</TableCell>
                     <TableCell>{studentItem.data.dateOfBirth}</TableCell>
                     <TableCell>
@@ -279,7 +368,9 @@ const StudentTable = ({ students, filtered, search }) => {
                     key={studentItem.id}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
-                    <TableCell>{i + 1}</TableCell>
+                    <TableCell>
+                      {i + 1} {studentItem.id}
+                    </TableCell>
                     <TableCell>{studentItem.data.fullName}</TableCell>
                     <TableCell>{studentItem.data.className}</TableCell>
                     <TableCell>{studentItem.data.dateOfBirth}</TableCell>
