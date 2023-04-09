@@ -224,9 +224,6 @@ const StudentTable = ({ students, filtered, search }) => {
 
   const addResult = (className, studentId) => {
     handleClickOpen();
-
-    console.log("asdasasd");
-
     const getResultOfSutdent = async () => {
       try {
         const examRef = doc(db, id, studentId);
@@ -234,8 +231,6 @@ const StudentTable = ({ students, filtered, search }) => {
 
         if (resultSnap.exists()) {
           return { result: resultSnap.data() };
-          // setSutentResult(resultSnap.data());
-          // setAttendence(resultSnap.data()?.attendence);
         } else {
           return { result: null };
         }
@@ -283,10 +278,7 @@ const StudentTable = ({ students, filtered, search }) => {
     <Container className="mt-3">
       <input type={"file"} onChange={handleFileChange} ref={ref} />
 
-      <button
-        // disabled={true}
-        onClick={importResult}
-      >
+      <button disabled={true} onClick={importResult}>
         Import
       </button>
       <TableContainer component={Paper}>
@@ -374,9 +366,7 @@ const StudentTable = ({ students, filtered, search }) => {
                     key={studentItem.id}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
-                    <TableCell>
-                      {i + 1} {studentItem.id}
-                    </TableCell>
+                    <TableCell>{i + 1}</TableCell>
                     <TableCell>{studentItem.data.fullName}</TableCell>
                     <TableCell>{studentItem.data.className}</TableCell>
                     <TableCell>{studentItem.data.dateOfBirth}</TableCell>
