@@ -17,13 +17,10 @@ const Result = ({ student, results, exam, subjects }) => {
     result["Handwriting"] = result["Writing"];
   }
 
-  console.log({ subjects });
-
-  console.log({ result });
   const ref = useRef();
   let marks = [];
   subjects.forEach((element) => {
-    if (!element.subjectName === "Nepali.Oral") {
+    if (typeof result["Nepali.Oral"] === "undefined") {
       marks.push(result["Nepali Oral"]);
     } else {
       marks.push(result[element.subjectName]);
