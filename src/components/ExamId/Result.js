@@ -16,17 +16,23 @@ const Result = ({ student, results, exam, subjects }) => {
   if (result.hasOwnProperty("Writing")) {
     result["Handwriting"] = result["Writing"];
   }
+
+  console.log({ subjects });
+
   const ref = useRef();
   let marks = [];
   subjects.forEach((element) => {
-    marks.push(result[element.subjectName]);
+    if (element.subjectName === "Nepali.Oral") {
+      marks.push(result["Nepali Oral"]);
+    } else {
+      marks.push(result[element.subjectName]);
+    }
   });
 
   const sum = marks.reduce((accumulator, value) => {
     return accumulator + value;
   }, 0);
 
-  // console.log({ results });
   return (
     <>
       <ReactToPrint

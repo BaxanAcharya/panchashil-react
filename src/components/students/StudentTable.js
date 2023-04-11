@@ -317,9 +317,7 @@ const StudentTable = ({ students, filtered, search }) => {
                     key={studentItem.id}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
-                    <TableCell>
-                      {i + 1} {studentItem.id}
-                    </TableCell>
+                    <TableCell>{i + 1}</TableCell>
                     <TableCell>{studentItem.data.fullName} </TableCell>
                     <TableCell>{studentItem.data.className}</TableCell>
                     <TableCell>{studentItem.data.dateOfBirth}</TableCell>

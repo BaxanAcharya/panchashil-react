@@ -1,12 +1,6 @@
 export const getGrade = (subject, result) => {
   let subjectName = subject.subjectName;
   const subjectFullMarks = parseInt(subject.fullMarks);
-
-  console.log(" result", result);
-  console.log("subejct name", subject);
-
-  console.log(result.hasOwnProperty("Nepali.Oral"));
-
   if (
     !result.hasOwnProperty("Nepali.Oral") &&
     subject.subjectName === "Nepali.Oral"
