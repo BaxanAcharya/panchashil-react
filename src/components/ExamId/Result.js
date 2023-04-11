@@ -19,15 +19,18 @@ const Result = ({ student, results, exam, subjects }) => {
 
   console.log({ subjects });
 
+  console.log({ result });
   const ref = useRef();
   let marks = [];
   subjects.forEach((element) => {
-    if (element.subjectName === "Nepali.Oral") {
+    if (!element.subjectName === "Nepali.Oral") {
       marks.push(result["Nepali Oral"]);
     } else {
       marks.push(result[element.subjectName]);
     }
   });
+
+  console.log(marks);
 
   const sum = marks.reduce((accumulator, value) => {
     return accumulator + value;
